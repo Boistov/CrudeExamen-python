@@ -12,22 +12,28 @@ def user_create(request):
         password = request.POST['password']
         User.objects.create(username=username, email=email, password=password)
         return redirect('user_list')
-    return render(request, 'user_create.html')
+    return render(request, 'user.html')
 
-def user_update(request, pk):
-    user = get_object_or_404(User, pk=pk)
+def user_update(request):
     if request.method == 'POST':
+        user_id = request.POST['user_id']
+        user = get_object_or_404(User, id=user_id)
         user.username = request.POST['username']
         user.email = request.POST['email']
         user.password = request.POST['password']
         user.save()
         return redirect('user_list')
-    return render(request, 'user_update.html', {'user': user})
+    users = User.objects.all()
+    return render(request, 'user_update.html', {'users': users})
 
-def user_delete(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    user.delete()
-    return redirect('user_list')
+def user_delete(request):
+    if request.method == 'POST':
+        user_id = request.POST['user_id']
+        user = get_object_or_404(User, id=user_id)
+        user.delete()
+        return redirect('user_list')
+    users = User.objects.all()
+    return render(request, 'user_delete.html', {'users': users})
 
 def task_list(request):
     tasks = Task.objects.all()
@@ -38,26 +44,32 @@ def task_create(request):
         title = request.POST['title']
         description = request.POST['description']
         user_id = request.POST['user']
-        user = get_object_or_404(User, pk=user_id)
+        user = get_object_or_404(User, id=user_id)
         Task.objects.create(title=title, description=description, user=user)
         return redirect('task_list')
     users = User.objects.all()
-    return render(request, 'task_create.html', {'users': users})
+    return render(request, 'task.html', {'users': users})
 
-def task_update(request, pk):
-    task = get_object_or_404(Task, pk=pk)
+def task_update(request):
     if request.method == 'POST':
+        task_id = request.POST['task_id']
+        task = get_object_or_404(Task, id=task_id)
         task.title = request.POST['title']
         task.description = request.POST['description']
         task.completed = 'completed' in request.POST
         user_id = request.POST['user']
-        task.user = get_object_or_404(User, pk=user_id)
+        task.user = get_object_or_404(User, id=user_id)
         task.save()
         return redirect('task_list')
+    tasks = Task.objects.all()
     users = User.objects.all()
-    return render(request, 'task_update.html', {'task': task, 'users': users})
+    return render(request, 'task_update.html', {'tasks': tasks, 'users': users})
 
-def task_delete(request, pk):
-    task = get_object_or_404(Task, pk=pk)
-    task.delete()
-    return redirect('task_list')
+def task_delete(request):
+    if request.method == 'POST':
+        task_id = request.POST['task_id']
+        task = get_object_or_404(Task, id=task_id)
+        task.delete()
+        return redirect('task_list')
+    tasks = Task.objects.all()
+    return render(request, 'task_delete.html', {'tasks': tasks})
