@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Task</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        li:hover {
+            background-color: #e0e0e0;
+        }
+        .task-actions {
+            margin-left: 10px;
+        }
+        .task-actions a {
+            text-decoration: none;
+            color: #007bff;
+            margin-left: 10px;
+        }
+        .task-actions a:hover {
+            text-decoration: underline;
+        }
+        .create-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .create-link a {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .create-link a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hello evry one welcome to youre hom epages </h1>
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    <strong>{{ task.title }}</strong> - {{ task.description }} ({{ task.user.username }})
+                    <div class="task-actions">
+                        <a href="{% url 'task_update' task.id %}">Edit</a>
+                        <a href="{% url 'task_delete' task.id %}">Delete</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No tasks found.</li>
+            {% endfor %}
+        </ul>
+        <div class="create-link">
+            <a href="{% url 'task_create' %}">Create New Task</a>
+        </div>
+    </div>
+</body>
+</html>
